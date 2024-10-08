@@ -30,7 +30,7 @@ jobs:
       - name: Validate changed JSON-LD files
         run: |
           # Get the list of added or modified .jsonld files in the pull request
-          git diff --name-only --diff-filter=AM origin/main | grep '\.jsonld$' > changed_files.txt
+          git diff --name-only --diff-filter=AM origin/json-ld-validator | grep '\.jsonld$' > changed_files.txt
 
           # Check if there are any changed JSON-LD files
           if [ -s changed_files.txt ]; then
