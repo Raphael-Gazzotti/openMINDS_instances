@@ -29,8 +29,14 @@ jobs:
 
       - name: Validate changed JSON-LD files
         run: |
-          # Get the list of added or modified .jsonld files in the pull request
-          git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt
+          # Determine whether it's a pull request or push
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # Get the list of added or modified .jsonld files in the pull request
+            git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt
+          else
+            # Get the list of added or modified .jsonld files in the last commit on push
+            git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt
+          fi
 
           # Check if there are any changed JSON-LD files
           if [ -s changed_files.txt ]; then
