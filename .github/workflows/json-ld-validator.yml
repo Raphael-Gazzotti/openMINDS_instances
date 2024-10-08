@@ -27,21 +27,33 @@ jobs:
       - name: Install JSONLint
         run: npm install -g jsonlint
 
-      - name: Validate changed JSON-LD files
+      # Handle Pull Request event
+      - name: Validate JSON-LD files on pull request
+        if: github.event_name == 'pull_request'
         run: |
-          # Determine whether it's a pull request or push
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # Get the list of added or modified .jsonld files in the pull request
-            git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt
+          # Get the list of added or modified .jsonld files in the pull request
+          git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt
+
+          # Check if there are any changed JSON-LD files
+          if [ -s changed_files.txt ]; then
+            cat changed_files.txt || echo "changed_files.txt is empty or does not exist."
+            # Validate each changed .jsonld file
+            cat changed_files.txt | xargs -n1 jsonlint -q || echo "JSON validation failed for some files."
           else
-            # Check if there is only one commit in the branch
-            if git rev-parse HEAD^ >/dev/null 2>&1; then
-              # Get the list of added or modified .jsonld files between last two commits
-              git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt
-            else
-              # Handle the case where there is only one commit
-              git diff --name-only --diff-filter=AM HEAD | grep '\.jsonld$' > changed_files.txt
-            fi
+            echo "No JSON-LD files to validate."
+          fi
+
+      # Handle Push event
+      - name: Validate JSON-LD files on push
+        if: github.event_name == 'push'
+        run: |
+          # Check if there is only one commit in the branch
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            # Get the list of added or modified .jsonld files between last two commits
+            git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt
+          else
+            # Handle the case where there is only one commit
+            git diff --name-only --diff-filter=AM HEAD | grep '\.jsonld$' > changed_files.txt
           fi
 
           # Check if there are any changed JSON-LD files
