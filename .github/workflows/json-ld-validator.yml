@@ -34,8 +34,14 @@ jobs:
             # Get the list of added or modified .jsonld files in the pull request
             git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt
           else
-            # Get the list of added or modified .jsonld files in the last commit on push
-            git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt
+            # Check if there is only one commit in the branch
+            if git rev-parse HEAD^ >/dev/null 2>&1; then
+              # Get the list of added or modified .jsonld files between last two commits
+              git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt
+            else
+              # Handle the case where there is only one commit
+              git diff --name-only --diff-filter=AM HEAD | grep '\.jsonld$' > changed_files.txt
+            fi
           fi
 
           # Check if there are any changed JSON-LD files
