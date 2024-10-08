@@ -1,0 +1,41 @@
+name: JSON-LD Validator
+
+on:
+  pull_request:
+    branches:
+      - json-ld-validator
+  push:
+    branches:
+      - json-ld-validator
+
+jobs:
+  validate-jsonld:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout instances repository
+        uses: actions/checkout@v3
+        with:
+          ref: json-ld-validator
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install JSONLint
+        run: npm install -g jsonlint
+
+      - name: Validate changed JSON-LD files
+        run: |
+          # Get the list of added or modified .jsonld files in the pull request
+          git diff --name-only --diff-filter=AM origin/main | grep '\.jsonld$' > changed_files.txt
+
+          # Check if there are any changed JSON-LD files
+          if [ -s changed_files.txt ]; then
+            # Validate each changed .jsonld file
+            cat changed_files.txt | xargs -n1 jsonlint -q
+          else
+            echo "No JSON-LD files to validate."
+          fi
