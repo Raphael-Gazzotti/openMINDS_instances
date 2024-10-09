@@ -29,8 +29,10 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
+          git fetch origin $GITHUB_BASE_REF
+
           # Compare the changes between the PR branch and the base branch
-          git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt || true
+          git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
 
           # Check and validate JSON-LD files if present
           if [ -s changed_files.txt ]; then
