@@ -37,13 +37,25 @@ jobs:
             echo "The following JSON-LD files will be validated:"
             cat changed_files.txt
 
+            validation_failed=false
+          
             # Validate each file
             while IFS= read -r file; do
               echo "Validating $file..."
               if ! jsonld validate "$file"; then
                 echo "❌ Validation failed for $file"
+                validation_output=$(jsonld validate "$file" 2>&1)
+                echo "$validation_output"
+                validation_failed=true
               fi
             done < changed_files.txt
+            
+            if [ "$validation_failed" = true ]; then
+              echo "❌ Some JSON-LD files failed validation."
+              exit 1
+            else
+              echo "✅ All JSON-LD files passed validation."
+            fi
           else
             echo "No JSON-LD files to validate."
           fi
