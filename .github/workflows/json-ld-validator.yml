@@ -27,6 +27,9 @@ jobs:
       - name: Install JSON-LD Validator
         run: npm install -g jsonld
 
+      - name: Add npm global bin to PATH
+        run: echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+
       - name: Validate JSON-LD files
         run: |
           git fetch origin $GITHUB_BASE_REF
