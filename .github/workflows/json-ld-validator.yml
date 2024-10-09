@@ -24,8 +24,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install JSONLint
-        run: npm install -g jsonlint
+      - name: Install JSON-LD Validator
+        run: npm install -g jsonld
 
       - name: Validate JSON-LD files
         run: |
@@ -40,7 +40,9 @@ jobs:
             # Validate each file
             while IFS= read -r file; do
               echo "Validating $file..."
-              jsonlint "$file" || echo "❌ Validation failed for $file"
+              if ! jsonld validate "$file"; then
+                echo "❌ Validation failed for $file"
+              fi
             done < changed_files.txt
           else
             echo "No JSON-LD files to validate."
