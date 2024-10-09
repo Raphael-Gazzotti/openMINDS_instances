@@ -16,7 +16,7 @@
     "hasEntity": [
       {
         "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_centralRegion"
-      },
+      }
       {
         "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_PRE"
       },
