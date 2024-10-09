@@ -25,14 +25,13 @@ jobs:
           node-version: '20'
 
       - name: Install JSON-LD Validator
-        run: npm install -g jsonld-cli
+        run: npm install -g jsonld
 
       - name: Add npm global bin to PATH
         run: echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Validate JSON-LD files
         run: |
-          # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
 
           # Compare the changes between the PR branch and the base branch
@@ -42,24 +41,20 @@ jobs:
           if [ -s changed_files.txt ]; then
             echo "The following JSON-LD files will be validated:"
             cat changed_files.txt
-          
-            validation_failed=false
 
+            validation_failed=false
+          
             # Validate each file
             while IFS= read -r file; do
               echo "Validating $file..."
-              # Use jsonld-cli to validate JSON-LD and capture the output
-              validation_output=$(jsonld validate "$file" --verbose 2>&1)
-              if [ $? -ne 0 ]; then
+              if ! jsonld validate "$file"; then
                 echo "❌ Validation failed for $file"
+                validation_output=$(jsonld validate "$file" 2>&1)
                 echo "$validation_output"
                 validation_failed=true
-              else
-                echo "✅ Validation passed for $file"
               fi
             done < changed_files.txt
-
-            # If any validation failed, exit with a non-zero status
+            
             if [ "$validation_failed" = true ]; then
               echo "❌ Some JSON-LD files failed validation."
               exit 1
@@ -70,3 +65,4 @@ jobs:
             echo "No JSON-LD files to validate."
           fi
         shell: bash
+        
