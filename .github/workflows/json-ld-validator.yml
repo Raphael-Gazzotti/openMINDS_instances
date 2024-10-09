@@ -42,7 +42,7 @@ jobs:
           if [ -s changed_files.txt ]; then
             echo "The following JSON-LD files will be validated:"
             cat changed_files.txt
-          
+
             validation_failed=false
 
             # Validate each file
@@ -52,6 +52,7 @@ jobs:
               validation_output=$(jsonld validate "$file" 2>&1)
               if [ $? -ne 0 ]; then
                 echo "❌ Validation failed for $file"
+                echo "Validation output for $file:"
                 echo "$validation_output"
                 validation_failed=true
               else
