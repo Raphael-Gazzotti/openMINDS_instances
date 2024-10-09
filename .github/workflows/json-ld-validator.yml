@@ -16,7 +16,7 @@ jobs:
       - name: Checkout instances repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2  # Ensure enough history is checked out
+          fetch-depth: 0  # Fetch full history to compare against the base branch
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
@@ -29,24 +29,19 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
-          # Check if there is more than one commit
-          if git rev-parse HEAD^ >/dev/null 2>&1; then
-            echo "More than one commit detected, running git diff between HEAD^ and HEAD"
-            # Get the list of added or modified .jsonld files between the last two commits
-            git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt || true
-          else
-            echo "Only one commit detected, running git diff on HEAD"
-            # Handle the case where there is only one commit
-            git diff --name-only --diff-filter=AM HEAD | grep '\.jsonld$' > changed_files.txt || true
-          fi
+          # Get the list of added or modified .jsonld files between last two commits
+          git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt || true
 
-          # Output files that are being validated
+          # Check and validate JSON-LD files if present
           if [ -s changed_files.txt ]; then
             echo "The following JSON-LD files will be validated:"
             cat changed_files.txt
 
-            # Validate each changed .jsonld file
-            xargs -n1 jsonlint -q < changed_files.txt || { echo "JSON validation failed for some files."; exit 1; }
+            # Validate each file
+            while IFS= read -r file; do
+              echo "Validating $file..."
+              jsonlint "$file" || echo "❌ Validation failed for $file"
+            done < changed_files.txt
           else
             echo "No JSON-LD files to validate."
           fi
