@@ -27,9 +27,6 @@ jobs:
       - name: Install JSON-LD Validator
         run: npm install -g jsonld-cli
 
-      - name: Add npm global bin to PATH
-        run: echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
-
       - name: Validate JSON-LD files
         run: |
           # Fetch the base branch for comparison
@@ -49,7 +46,7 @@ jobs:
             while IFS= read -r file; do
               echo "Validating $file..."
               # Use jsonld-cli to validate JSON-LD and capture the output
-              validation_output=$(jsonld validate "$file" --verbose 2>&1)
+              validation_output=$(jsonld lint "$file" 2>&1)
               if [ $? -ne 0 ]; then
                 echo "❌ Validation failed for $file"
                 echo "$validation_output"
