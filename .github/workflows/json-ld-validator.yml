@@ -29,8 +29,8 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
-          # Get the list of added or modified .jsonld files between last two commits
-          git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt || true
+          # Compare the changes between the PR branch and the base branch
+          git diff --name-only --diff-filter=AM $GITHUB_BASE_REF...$GITHUB_HEAD_REF | grep '\.jsonld$' > changed_files.txt || true
 
           # Check and validate JSON-LD files if present
           if [ -s changed_files.txt ]; then
