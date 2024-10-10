@@ -29,7 +29,8 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
-          set -x
+          # Disable immediate exit on failure so we can capture output
+          set -e
           
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
