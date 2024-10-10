@@ -48,7 +48,7 @@ jobs:
             while IFS= read -r file; do
               echo "Validating $file..."
               # Use jsonld-cli to validate JSON-LD and capture the output
-              validation_output=$(jsonld lint "$file" 2>&1)
+              validation_output=$(jsonld lint "$file" 2>&1 || true)
               echo "$validation_output"
               echo "XXXX"
               
