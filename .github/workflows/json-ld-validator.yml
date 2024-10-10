@@ -46,10 +46,10 @@ jobs:
             while IFS= read -r file; do
               echo "Validating $file..."
               # Use jsonld-cli to validate JSON-LD and capture the output
-              validation_output=$(jsonld lint "$file" 2>&1)
+              jsonld lint "$file" >output.log 2>&1
               
-              if [[ "$validation_output" == *"SyntaxError"* || "$validation_output" == *"Error"* || "$validation_output" == *"Invalid"* ]]; then
-                echo "$validation_output"
+              if grep -q "Error\|Invalid" output.log; then
+                cat output.log
                 echo "❌ Validation failed for $file"
                 validation_failed=true
               else
