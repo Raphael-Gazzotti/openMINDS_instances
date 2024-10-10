@@ -29,6 +29,8 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
+          set +x
+          
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
 
