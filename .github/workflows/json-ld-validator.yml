@@ -50,8 +50,9 @@ jobs:
               # Use jsonld-cli to validate JSON-LD and capture the output
               validation_output=$(jsonld lint "$file" 2>&1)
               echo "$validation_output"
+              echo "XXXX"
               
-              if echo "$validation_output" | grep -q "SyntaxError\|Error\|Invalid"; then
+              if echo "$validation_output" | grep -E "SyntaxError|Error|Invalid" > /dev/null; then
                 echo "❌ Validation failed for $file"
                 validation_failed=true
               else
