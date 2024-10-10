@@ -47,9 +47,10 @@ jobs:
               echo "Validating $file..."
               # Use jsonld-cli to validate JSON-LD and capture the output
               validation_output=$(jsonld lint "$file" 2>&1)
+              echo "$validation_output"
+              
               if [ $? -ne 0 ]; then
                 echo "❌ Validation failed for $file"
-                echo "$validation_output"
                 validation_failed=true
               else
                 echo "✅ Validation passed for $file"
