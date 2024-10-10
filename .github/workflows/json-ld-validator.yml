@@ -29,7 +29,7 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
-          set +x
+          set -x
           # Disable immediate exit on failure so we can capture output
           set -e
           
