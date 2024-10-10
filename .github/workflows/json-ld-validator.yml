@@ -29,9 +29,6 @@ jobs:
 
       - name: Validate JSON-LD files
         run: |
-          set -x
-          set +e
-          
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
 
@@ -49,10 +46,10 @@ jobs:
             while IFS= read -r file; do
               echo "Validating $file..."
               # Use jsonld-cli to validate JSON-LD and capture the output
-              jsonld lint "$file" >output.log 2>&1
-              cat output.log
+              validation_output=$(jsonld lint "$file" 2>&1)
               
-              if [ $? -ne 0 ]; then
+              if [[ "$validation_output" == *"SyntaxError"* || "$validation_output" == *"Error"* || "$validation_output" == *"Invalid"* ]]; then
+                echo "$validation_output"
                 echo "❌ Validation failed for $file"
                 validation_failed=true
               else
