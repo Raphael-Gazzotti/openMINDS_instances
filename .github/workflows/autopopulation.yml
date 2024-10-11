@@ -1,0 +1,38 @@
+name: Autopopulation
+
+on:
+  # Trigger when a PR is merged
+  pull_request:
+    #types: [closed]
+    branches:
+      - autopopulation
+  push:
+    branches:
+      - autopopulation
+
+jobs:
+  sync-json:
+    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get modified JSON-LD files
+        id: get_modified_files
+        run: |
+          # Fetch the base branch for comparison
+          git fetch origin $GITHUB_BASE_REF
+
+          # Compare the changes between the PR branch and the base branch
+          git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true > changed_files.txt || true
+          
+          if [ -s changed_files.txt ]; then
+            while IFS= read -r file; do
+              FILE_VERSION=$(echo "$file" | cut -d'/' -f3)
+              FILE_NAME=$(basename "$file")
+          echo "$FILE_VERSION"
+          echo "$FILE_NAME"
+
+        shell: bash
