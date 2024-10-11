@@ -25,6 +25,8 @@ jobs:
       - name: Get modified JSON-LD files
         id: get_modified_files
         run: |
+          set+x
+          
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
 
