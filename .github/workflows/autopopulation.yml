@@ -25,13 +25,13 @@ jobs:
       - name: Get modified JSON-LD files
         id: get_modified_files
         run: |
-          set-x
+          set -x
           
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
 
           # Compare the changes between the PR branch and the base branch
-          git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true > changed_files.txt || true
+          git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
           
           if [ -s changed_files.txt ]; then
             while IFS= read -r file; do
