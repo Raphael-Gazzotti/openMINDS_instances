@@ -5,10 +5,10 @@ on:
   pull_request:
     #types: [closed]
     branches:
-      - autopopulation
+      - dupplicated-main
   push:
     branches:
-      - autopopulation
+      - dupplicated-main
 
 jobs:
   sync-json:
