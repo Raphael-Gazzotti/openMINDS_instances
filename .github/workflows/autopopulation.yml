@@ -32,6 +32,7 @@ jobs:
           
           # Compare the changes between the PR branch and the base branch
           git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
+          echo changed_files.txt
           
           # Check if there are any changed .jsonld files
           if [ -s changed_files.txt ]; then
