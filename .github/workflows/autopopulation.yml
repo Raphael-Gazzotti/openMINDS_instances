@@ -41,7 +41,7 @@ jobs:
               FILE_MODULE=$(echo "$file" | cut -d'/' -f3)
               FILE_NAME=$(basename "$file")
               echo "$FILE_VERSION"
-              echo "FILE_MODULE"
+              echo "$FILE_MODULE"
               echo "$FILE_NAME"
             done < changed_files.txt  # Make sure to read from the file here
           fi
