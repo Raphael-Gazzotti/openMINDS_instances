@@ -12,7 +12,7 @@ on:
 
 jobs:
   sync-json:
-    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    #if: github.event.pull_request.merged == true || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout the repository
