@@ -73,7 +73,7 @@ jobs:
               # Iterate over all other versions (excluding the one where the file was modified)
               for VERSION in $(ls "$MAIN_FOLDER"); do
                 if [ "$VERSION" != "$FILE_VERSION" ]; then
-                  TARGET_FILE="$MAIN_FOLDER/$VERSION/$FILE_NAME"
+                  TARGET_FILE="$MAIN_FOLDER/$VERSION/$MODULE_NAME/$FILE_NAME"
                   
                   # If the target file exists in the other version folder, sync the properties
                   if [ -f "$TARGET_FILE" ]; then
