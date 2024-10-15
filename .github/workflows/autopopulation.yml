@@ -83,7 +83,7 @@ jobs:
                     jq --rawfile src "$FILE" '
                       reduce (paths) as $path (
                         .;
-                        if ($path[-1] == "@id" or $path[-1] == "@type" or $path[-1] == "@vocab") then
+                        if ($path[-1] == "@id" or $path[-1] == "@type" or $path[-1] == "@context") then
                           .  # Skip updating these paths
                         else
                           setpath($path; ($src | getpath($path)) // getpath($path))
