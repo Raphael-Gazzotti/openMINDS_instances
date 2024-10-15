@@ -80,7 +80,7 @@ jobs:
                     echo "Syncing properties from $FILE to $TARGET_FILE"
                     
                     # Sync the properties - except @id, @type, @vocab due to namespace changes
-                    jq --argfile src "$FILE" '
+                    jq --argjson src "$FILE" '
                       reduce (paths) as $path (
                         .;
                         if ($path[-1] == "@id" or $path[-1] == "@type" or $path[-1] == "@vocab") then
