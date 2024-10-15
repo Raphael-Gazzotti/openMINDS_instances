@@ -79,13 +79,18 @@ jobs:
                   if [ -f "$TARGET_FILE" ]; then
                     echo "Syncing properties from $FILE to $TARGET_FILE"
                     
-                    # Sync the properties
+                    # Sync the properties - except @id, @type, @vocab due to namespace changes
                     jq --argfile src "$FILE" '
                       reduce (paths) as $path (
                         .;
-                        setpath($path; ($src | getpath($path)) // getpath($path))
+                        if ($path[-1] == "@id" or $path[-1] == "@type" or $path[-1] == "@vocab") then
+                          .  # Skip updating these paths
+                        else
+                          setpath($path; ($src | getpath($path)) // getpath($path))
+                        end
                       )
-                    ' "$TARGET_FILE" > "tmp.$$.json" && mv "tmp.$$.json" "$TARGET_FILE"
+                    ' "$TARGET_FILE" > "tmp.$$.json" #&& mv "tmp.$$.json" "$TARGET_FILE"
+                    echo "tmp.$$.json"
                   fi
                 fi
               done
