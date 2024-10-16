@@ -27,9 +27,6 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install jq
-        run: sudo apt-get install jq
-
       # Step 3: Get modified JSON-LD files
       - name: Get modified JSON-LD files
         id: get_modified_files

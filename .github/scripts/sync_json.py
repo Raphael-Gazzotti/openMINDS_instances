@@ -11,13 +11,27 @@ def sync_properties(src_data, tgt_data):
 
         # If the value is a dictionary, recurse
         if isinstance(value, dict):
-            tgt_data[key] = sync_properties(value, tgt_data.get(key, {}))
+            tgt_data[key] = tgt_data.get(key, {})
+            tgt_data[key] = sync_properties(value, tgt_data[key])
         elif isinstance(value, list):
-            tgt_data[key] = value  # This will replace the existing list
-        else:
-            # For strings and other types, update or keep the original
-            tgt_data[key] = value if value is not None else tgt_data.get(key)
+            # Handle list synchronization
+            tgt_data[key] = tgt_data.get(key, [])
+            tgt_data_dict = {item['@id']: item for item in tgt_data[key] if isinstance(item, dict) and '@id' in item}
 
+            for item in value:
+                if isinstance(item, dict) and '@id' in item:
+                    # Update existing items, skipping @id
+                    if item['@id'] in tgt_data_dict:
+                        tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict[item['@id']])
+                    else:
+                        tgt_data[key].append(item)  # Add new item to the target list
+                else:
+                    # Append non-dict items directly
+                    tgt_data[key].append(item)
+        else:
+            # Otherwise, just update the value in the target
+            tgt_data[key] = value
+    print(tgt_data)
     return tgt_data
 
 
@@ -31,11 +45,11 @@ def main(src_file, tgt_file):
         tgt_data = json.load(f)
 
     # Sync properties
-    updated_tgt_data = sync_properties(src_data, tgt_data)
+    target_data = sync_properties(src_data, tgt_data)
 
     # Write the updated target data back to the file
     with open(tgt_file, 'w') as f:
-        json.dump(updated_tgt_data, f, indent=2)
+        json.dump(target_data, f, indent=2)
 
     print(f'Successfully synced properties from {src_file} to {tgt_file}')
 
