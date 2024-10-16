@@ -1,4 +1,4 @@
-name: Autopopulation
+name: Autopopulation Py
 
 on:
   # Trigger when a PR is merged
@@ -22,14 +22,15 @@ jobs:
           fetch-depth: 0  # Fetch full history to compare against the base branch
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          node-version: '20'
+          python-version: '3.9'
 
       - name: Install jq
         run: sudo apt-get install jq
 
+      # Step 3: Get modified JSON-LD files
       - name: Get modified JSON-LD files
         id: get_modified_files
         run: |
@@ -40,7 +41,6 @@ jobs:
           
           # Compare the changes between the PR branch and the base branch
           git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
-          #echo changed_files.txt
           
           declare -A seen_files
           declare -A modified_jsons
@@ -79,28 +79,8 @@ jobs:
                   if [ -f "$TARGET_FILE" ]; then
                     echo "Syncing properties from $FILE to $TARGET_FILE"
                     
-                    # Sync the properties - except @id, @type, @context due to namespace changes
-                    jq --slurpfile src "$FILE" '
-                      reduce (paths) as $path (
-                        .;
-                        ($path | tostring) as $debugPath | # Convert the current path to a string for logging purposes
-                        if ($path[-1] != "@id" and $path[-1] != "@type" and $path[-1] != "@context") then
-                          # Add debug logging to output the problematic path
-                          $debugPath as $currentPath |
-                          # Check if both source and target are objects or arrays
-                          if (getpath($path) | type == "object" or getpath($path) | type == "array") and 
-                             ($src[0] | getpath($path) | type == "object" or $src[0] | getpath($path) | type == "array") then
-                            setpath($path; ($src[0] | getpath($path)) // getpath($path))
-                          else
-                            # Output the path to identify where the issue occurs
-                            $currentPath
-                          end
-                        else
-                          .
-                        end
-                      )
-                    ' "$TARGET_FILE" > "tmp.$$.json" #&& mv "tmp.$$.json" "$TARGET_FILE"
-                    echo "tmp.$$.json"
+                    # Run the Python syncing script
+                    python sync_json.py "$FILE" "$TARGET_FILE"
                   fi
                 fi
               done
