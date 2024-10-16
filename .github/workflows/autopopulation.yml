@@ -83,13 +83,17 @@ jobs:
                     jq --slurpfile src "$FILE" '
                       reduce (paths) as $path (
                         .;
+                        ($path | tostring) as $debugPath | # Convert the current path to a string for logging purposes
                         if ($path[-1] != "@id" and $path[-1] != "@type" and $path[-1] != "@context") then
-                          # Check if the target path exists and is an object or array
-                          if (getpath($path) | type == "object" or getpath($path) | type == "array") then
-                            # If the source has the path, update it; otherwise, keep the original
+                          # Add debug logging to output the problematic path
+                          $debugPath as $currentPath |
+                          # Check if both source and target are objects or arrays
+                          if (getpath($path) | type == "object" or getpath($path) | type == "array") and 
+                             ($src[0] | getpath($path) | type == "object" or $src[0] | getpath($path) | type == "array") then
                             setpath($path; ($src[0] | getpath($path)) // getpath($path))
                           else
-                            .
+                            # Output the path to identify where the issue occurs
+                            $currentPath
                           end
                         else
                           .
