@@ -23,7 +23,9 @@ def sync_properties(src_data, tgt_data):
                     if item['@id'] in tgt_data_dict:
                         # Update properties from src_data to tgt_data_dict[item['@id']]
                         tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict[item['@id']])
-
+                else:
+                    # For non-dict items, append directly
+                    tgt_data[key].append(item)
             # After processing, ensure we update the target's list with updated dicts
             tgt_data[key] = list(tgt_data_dict.values())
         else:
