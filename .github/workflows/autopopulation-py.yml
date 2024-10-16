@@ -77,7 +77,7 @@ jobs:
                     echo "Syncing properties from $FILE to $TARGET_FILE"
                     
                     # Run the Python syncing script
-                    python sync_json.py "$FILE" "$TARGET_FILE"
+                    python .github/scripts/sync_json.py "$FILE" "$TARGET_FILE"
                   fi
                 fi
               done
