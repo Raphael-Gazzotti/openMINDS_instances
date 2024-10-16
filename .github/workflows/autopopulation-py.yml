@@ -84,11 +84,11 @@ jobs:
             done
 
             # Commit changes if any JSON-LD files were modified
-            git config --global user.name "Raphael-Gazzotti"
-            git config --global user.email "gazzotti.raphael@gmail.com"
-            git add $MAIN_FOLDER/**/*.jsonld
-            git commit -m "Population of properties from modified JSON-LD files"
-            git push origin duplicated-main
+            # git config --global user.name "Raphael-Gazzotti"
+            # git config --global user.email "gazzotti.raphael@gmail.com"
+            # git add $MAIN_FOLDER/**/*.jsonld
+            # git commit -m "Population of properties from modified JSON-LD files"
+            # git push origin duplicated-main
           
             # Commit changes if any JSON-LD files were modified
             # git config --global user.name "openMINDS pipeline"
