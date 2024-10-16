@@ -23,7 +23,9 @@ def sync_properties(src_data, tgt_data):
                     if item['@id'] in tgt_data_dict:
                         # Update properties from src_data to tgt_data_dict[item['@id']]
                         tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict[item['@id']])
-
+                else:
+                    # For non-dict items, append directly
+                    tgt_data[key].append(item)
             # After processing, ensure we update the target's list with updated dicts
             tgt_data[key] = list(tgt_data_dict.values())
         else:
@@ -41,7 +43,9 @@ def main(src_file, tgt_file):
     # Load target JSON data
     with open(tgt_file) as f:
         tgt_data = json.load(f)
-
+        
+    print(f'Test synced properties from {src_file} to {tgt_file}')
+    
     # Sync properties
     target_data = sync_properties(src_data, tgt_data)
 
