@@ -43,7 +43,9 @@ def main(src_file, tgt_file):
     # Load target JSON data
     with open(tgt_file) as f:
         tgt_data = json.load(f)
-
+        
+    print(f'Test synced properties from {src_file} to {tgt_file}')
+    
     # Sync properties
     target_data = sync_properties(src_data, tgt_data)
 
