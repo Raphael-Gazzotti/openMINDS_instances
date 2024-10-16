@@ -12,8 +12,8 @@
   "author": null,
 	"axesOrigin": [
     {
-      "@type": "https://openminds.om-i.org/types/core/QuantitativeValueX",
-      "value": 75.0
+      "@type": "https://openminds.om-i.org/types/core/QuantitativeValue",
+      "value": 756.0
     },
     {
       "@type": "https://openminds.om-i.org/types/core/QuantitativeValue",
