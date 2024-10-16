@@ -17,7 +17,7 @@ def sync_properties(src_data, tgt_data):
         else:
             # For strings and other types, update or keep the original
             tgt_data[key] = value if value is not None else tgt_data.get(key)
-
+    print(tgt_data)
     return tgt_data
 
 
