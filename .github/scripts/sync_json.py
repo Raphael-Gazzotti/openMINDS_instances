@@ -26,6 +26,7 @@ def sync_properties(src_data, tgt_data):
                 else:
                     # Append non-dict items directly
                     tgt_data[key].append(item)
+            tgt_data[key] = list(tgt_data_dict.values())
         else:
             # Otherwise, just update the value in the target
             tgt_data[key] = value
