@@ -181,6 +181,9 @@
       "@id": "https://openminds.om-i.org/instances/brainAtlasVersion/AAL1_SPM12-v4"
     },
     {
+      "@ab": "https://ww38.exemple.com"
+    },
+    {
       "@id": "https://openminds.om-i.org/instances/brainAtlasVersion/AAL1_SPM8-v1"
     },
     {
