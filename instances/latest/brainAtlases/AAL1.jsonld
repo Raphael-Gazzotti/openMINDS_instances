@@ -4,7 +4,7 @@
   },
   "@id": "https://openminds.om-i.org/instances/brainAtlas/AAL1",
   "@type": "https://openminds.om-i.org/types/sands/BrainAtlas",
-  "abbreviation": null,
+  "abbreviation": "AAL1",
   "author": null,
   "custodian": null,
   "description": null,
@@ -16,9 +16,6 @@
     "hasEntity": [
       {
         "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_centralRegion"
-      },
-      {
-        "@id": "https://ww38.exemple.com"
       },
       {
         "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_PRE"
@@ -174,14 +171,11 @@
         "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_THA"
       }
     ],
-    "ontologyIdentifier": "AB"
+    "ontologyIdentifier": null
   },
   "hasVersion": [
     {
       "@id": "https://openminds.om-i.org/instances/brainAtlasVersion/AAL1_SPM12-v4"
-    },
-    {
-      "@ab": "https://ww38.exemple.com"
     },
     {
       "@id": "https://openminds.om-i.org/instances/brainAtlasVersion/AAL1_SPM8-v1"
@@ -200,6 +194,6 @@
   "howToCite": null,
   "shortName": "AAL Atlas 1",
 	"usedSpecies": {
-		"@id": "https://openminds.om-i.org/instances/species/homoSapiensAB"
+		"@id": "https://openminds.om-i.org/instances/species/homoSapiens"
 	}
 }
