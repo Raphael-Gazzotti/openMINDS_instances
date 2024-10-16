@@ -83,8 +83,7 @@ jobs:
                     jq --slurpfile src "$FILE" '
                       reduce (paths) as $path (
                         .;
-                        if (getpath($path) | has("@context") | not) and 
-                           ($path[-1] != "@id" and $path[-1] != "@type") then
+                        if ($path[-1] != "@id" and $path[-1] != "@type" and $path[-1] != "@context") then
                           # Check if the target path exists and is an object or array
                           if (getpath($path) | type == "object" or getpath($path) | type == "array") then
                             # If the source has the path, update it; otherwise, keep the original
@@ -92,6 +91,8 @@ jobs:
                           else
                             .
                           end
+                        else
+                          .
                         end
                       )
                     ' "$TARGET_FILE" > "tmp.$$.json" #&& mv "tmp.$$.json" "$TARGET_FILE"
