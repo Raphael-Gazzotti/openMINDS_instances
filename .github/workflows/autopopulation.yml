@@ -79,7 +79,7 @@ jobs:
                   if [ -f "$TARGET_FILE" ]; then
                     echo "Syncing properties from $FILE to $TARGET_FILE"
                     
-                    # Sync the properties - except @id, @type, @vocab due to namespace changes
+                    # Sync the properties - except @id, @type, @context due to namespace changes
                     jq --slurpfile src "$FILE" '
                       reduce (paths) as $path (
                         .;
@@ -88,6 +88,7 @@ jobs:
                             $path[-1] == "@context") then
                           .  # Skip updating these paths
                         else
+                          ($path | tostring) as $debugPath |
                           # Check if the target path exists and is an object or array
                           if (getpath($path) | type == "object" or getpath($path) | type == "array") then
                             # If the source has the path, update it; otherwise, keep the original
