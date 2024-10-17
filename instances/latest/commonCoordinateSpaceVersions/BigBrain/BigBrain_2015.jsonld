@@ -19,7 +19,7 @@
     },
     {
       "@type": "https://openminds.om-i.org/types/core/QuantitativeValue",
-      "value": 3500.0
+      "value": 6.0
     },
     {
       "@type": "https://openminds.om-i.org/types/core/QuantitativeValue",
@@ -35,7 +35,7 @@
       "@id": "https://openminds.om-i.org/instances/person/amuntsKatrin"
     }
   ],
-	"defaultImage": null,
+	"defaultImage": "test",
 	"description": null,
 	"digitalIdentifier": null,
 	"fullDocumentation": null,

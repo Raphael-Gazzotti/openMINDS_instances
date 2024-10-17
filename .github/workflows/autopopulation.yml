@@ -45,7 +45,7 @@ jobs:
           # Check if there are any changed .jsonld files
           if [ -s changed_files.txt ]; then
             while IFS= read -r file; do
-              FILE_MODULE=$(echo "$file" | cut -d'/' -f3)
+              FILE_MODULE=$(echo "$file" | cut -d'/' -f3-4)
               FILE_NAME=$(basename "$file")
               MODULE_NAME="$FILE_MODULE/$FILE_NAME"
               
@@ -71,6 +71,7 @@ jobs:
               for VERSION in $(ls "$MAIN_FOLDER"); do
                 if [ "$VERSION" != "$FILE_VERSION" ]; then
                   TARGET_FILE="$MAIN_FOLDER/$VERSION/$FILE_MODULE/$FILE_NAME"
+                  cat "$TARGET_FILE"
                   
                   # If the target file exists in the other version folder, sync the properties
                   if [ -f "$TARGET_FILE" ]; then
