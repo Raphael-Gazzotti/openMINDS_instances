@@ -50,7 +50,7 @@ def main(src_file, tgt_file):
 
     # Sync properties
     target_data = sync_properties(src_data, tgt_data)
-    
+    print(target_data)
     # Write the updated target data back to the file
     with open(tgt_file, 'w') as f:
         json.dump(target_data, f, indent=2)
