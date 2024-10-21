@@ -35,7 +35,8 @@ def sync_properties(src_data, tgt_data):
                 tgt_data[key] = value
         else:
             # Otherwise, just update the value in the target
-            tgt_data[key] = value
+            if key not in ["@id", "@type", "@vocab"]:
+                tgt_data[key] = value
     return tgt_data
 
 
