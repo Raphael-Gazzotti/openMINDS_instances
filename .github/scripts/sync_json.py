@@ -11,7 +11,8 @@ def sync_properties(src_data, tgt_data):
 
         # If the value is a dictionary, recurse
         if isinstance(value, dict):
-            tgt_data[key] = sync_properties(value, tgt_data.get(key, {}))
+            tgt_data[key] = tgt_data.get(key, {})
+            sync_properties(value, tgt_data[key])  # Recursively sync the dictionary
         elif isinstance(value, list):
             # Handle list items based on whether they contain dictionaries with '@id'
             if all(isinstance(item, dict) and '@id' in item for item in value):
@@ -21,16 +22,14 @@ def sync_properties(src_data, tgt_data):
                     tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict.get(item['@id'], {}))
                 tgt_data[key] = list(tgt_data_dict.values())
             else:
-                # Append or update items in the list
-                tgt_data[key] = [item if not isinstance(item, dict) or '@type' not in item else next(
-                    (tgt_item.update(item) or tgt_item for tgt_item in tgt_data.get(key, []) if tgt_item.get('@type') == item['@type']),
-                    item
-                ) for item in value]
+                # Replace the entire list if items do not have '@id'
+                tgt_data[key] = value
         else:
             # Update the value in the target
             tgt_data[key] = value
 
     return tgt_data
+
 
 
 def main(src_file, tgt_file):
