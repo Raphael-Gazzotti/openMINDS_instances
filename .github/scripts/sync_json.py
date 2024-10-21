@@ -4,36 +4,48 @@ import sys
 
 def sync_properties(src_data, tgt_data):
     """Sync properties from src_data to tgt_data, skipping specified keys."""
-    # Keys that should not be modified
-    preserve_keys = ["@vocab", "@type", "@id"]
-
     for key, value in src_data.items():
-        # Skip keys that should not be modified
-        if key in preserve_keys:
+        # Skip special keys that should not be modified
+        if key in ["@vocab", "@type", "@id"]:
             continue
-
+        
         # If the value is a dictionary, recurse
         if isinstance(value, dict):
             tgt_data[key] = tgt_data.get(key, {})
-            sync_properties(value, tgt_data[key])  # Recursively sync the dictionary
-            
+            tgt_data[key] = sync_properties(value, tgt_data[key])
         elif isinstance(value, list):
             tgt_data[key] = tgt_data.get(key, [])
             
-            # Handle list items containing dictionaries with '@id'
+            # If the list contains dicts with '@id', handle them specifically
             if all(isinstance(item, dict) and '@id' in item for item in value):
                 tgt_data_dict = {item['@id']: item for item in tgt_data[key] if isinstance(item, dict) and '@id' in item}
                 
                 for item in value:
-                    tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict.get(item['@id'], {}))
-                    
+                    if isinstance(item, dict) and '@id' in item:
+                        # Update existing items but skip special keys
+                        if item['@id'] in tgt_data_dict:
+                            tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict[item['@id']])
+                    else:
+                        # Append non-dict items directly
+                        tgt_data[key].append(item)
+
                 tgt_data[key] = list(tgt_data_dict.values())
             else:
-                # Replace the entire list if items do not have '@id' or are not dictionaries
-                tgt_data[key] = value
+                # Update existing items in the list if they exist
+                for item in value:
+                    if isinstance(item, dict) and '@type' in item:
+                        # Find existing item in target list by type or other identifier
+                        for tgt_item in tgt_data[key]:
+                            if isinstance(tgt_item, dict) and tgt_item.get('@type') == item['@type']:
+                                # Update existing item with the values from source
+                                tgt_item.update(item)  # Only update values, not keys like @type
+                                break
+                    else:
+                        # Append non-dict items directly
+                        tgt_data[key].append(item) 
         else:
             # Update the value in the target
-            tgt_data[key] = value 
+            tgt_data[key] = value
 
     return tgt_data
 
