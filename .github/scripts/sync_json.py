@@ -16,28 +16,26 @@ def sync_properties(src_data, tgt_data):
         elif isinstance(value, list):
             # Handle list synchronization
             tgt_data[key] = tgt_data.get(key, [])
-            #tgt_data_dict = {item['@id']: item for item in tgt_data[key] if isinstance(item, dict) and '@id' in item}
             
+            # Check if the list contains dicts with '@id'
             if all(isinstance(item, dict) and '@id' in item for item in value):
                 tgt_data_dict = {item['@id']: item for item in tgt_data[key] if isinstance(item, dict) and '@id' in item}
 
                 for item in value:
                     if isinstance(item, dict) and '@id' in item:
+                        # Update existing items, skipping @id
                         if item['@id'] in tgt_data_dict:
-                            # Update properties from src_data to tgt_data_dict[item['@id']]
                             tgt_data_dict[item['@id']] = sync_properties(item, tgt_data_dict[item['@id']])
                     else:
-                        # For non-dict items, append directly
+                        # Append non-dict items directly
                         tgt_data[key].append(item)
-                # After processing, ensure we update the target's list with updated dicts
                 tgt_data[key] = list(tgt_data_dict.values())
             else:
-                # If list items do not have '@id', replace entire list
-                tgt_data[key].append(item)
+                # If list items do not have '@id' (like 'axesOrigin'), replace entire list
+                tgt_data[key] = value
         else:
             # Otherwise, just update the value in the target
             tgt_data[key] = value
-
     return tgt_data
 
 
