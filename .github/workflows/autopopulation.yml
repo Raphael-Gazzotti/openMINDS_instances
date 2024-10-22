@@ -31,8 +31,6 @@ jobs:
       - name: Get modified JSON-LD files
         id: get_modified_files
         run: |
-          set -x
-          
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
           git checkout duplicated-main
@@ -90,7 +88,7 @@ jobs:
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified JSON-LD files"
             git show-ref
-            git push origin duplicated-main
+            git push origin HEAD:duplicated-main
           
             # Commit changes if any JSON-LD files were modified
             # git config --global user.name "openMINDS pipeline"
