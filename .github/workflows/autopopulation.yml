@@ -89,7 +89,7 @@ jobs:
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified JSON-LD files"
             git show-ref
-            git push origin duplicated-main
+            git push origin duplicated-main --force
           
             # Commit changes if any JSON-LD files were modified
             # git config --global user.name "openMINDS pipeline"
