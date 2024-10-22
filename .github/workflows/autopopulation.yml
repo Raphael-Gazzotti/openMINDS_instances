@@ -35,6 +35,7 @@ jobs:
           
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
+          git checkout duplicated-main
           
           # Compare the changes between the PR branch and the base branch
           git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
@@ -89,7 +90,7 @@ jobs:
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified JSON-LD files"
             git show-ref
-            git push origin duplicated-main --force
+            git push origin duplicated-main
           
             # Commit changes if any JSON-LD files were modified
             # git config --global user.name "openMINDS pipeline"
