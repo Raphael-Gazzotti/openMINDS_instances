@@ -5,11 +5,11 @@ on:
     types: [closed]
     branches:
       #- main
-      - autopopulation-v2
+      - duplicated-main
   push:
     branches:
       #- main
-      - autopopulation-v2
+      - duplicated-main
 
 jobs:
   sync-instances:
