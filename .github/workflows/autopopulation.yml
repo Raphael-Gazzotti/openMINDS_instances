@@ -5,11 +5,11 @@ on:
     types: [closed]
     branches:
       #- main
-      - autopopulation-v2
+      - duplicated
   push:
     branches:
       #- main
-      - autopopulation-v2
+      - duplicated
 
 jobs:
   sync-instances:
@@ -30,12 +30,15 @@ jobs:
       - name: Process and Sync Changes in instance Files
         id: process_sync_instances
         run: |
+          set -x
           # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
-          
+          echo “$GITHUB_BASE_REF”
+
           # Compare the changes between the PR branch and the base branch
           git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
           
+          cat changed_files.txt
           declare -A seen_files
           declare -A modified_jsons
           
@@ -95,7 +98,7 @@ jobs:
             git config --global user.email "gazzotti.raphael@gmail.com"
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified instance files"
-            git push origin HEAD:main
+            git push origin HEAD:duplicated
           else
             echo "No JSON-LD files modified."
           fi
