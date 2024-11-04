@@ -4,12 +4,11 @@ on:
   pull_request:
     types: [closed]
     branches:
-      #- main
-      - duplicated-main
+      - duplicated
   push:
     branches:
       #- main
-      - duplicated-main
+      - duplicated
 
 jobs:
   sync-instances:
@@ -31,6 +30,7 @@ jobs:
         id: process_sync_instances
         run: |
           # Fetch the base branch for comparison
+          set -x
           git fetch origin $GITHUB_BASE_REF
           
           # Compare the changes between the PR branch and the base branch
