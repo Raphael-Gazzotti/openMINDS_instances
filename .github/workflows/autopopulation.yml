@@ -4,10 +4,12 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      #- main
+      - autopopulation-v2
   push:
     branches:
-      - main
+      #- main
+      - autopopulation-v2
 
 jobs:
   sync-instances:
@@ -55,6 +57,10 @@ jobs:
             done < changed_files.txt
           fi
           
+          # TODO add when files will be updated
+          # wget https://raw.githubusercontent.com/openMetadataInitiative/openMINDS/refs/heads/main/vocab/types.json -P .github/templates/
+          # wget https://raw.githubusercontent.com/openMetadataInitiative/openMINDS/refs/heads/main/vocab/properties.json -P .github/templates/
+          
           if [ ${#modified_jsons[@]} -gt 0 ]; then
             MAIN_FOLDER="instances"
 
@@ -66,21 +72,27 @@ jobs:
               for VERSION in $(ls "$MAIN_FOLDER"); do
                 if [ "$VERSION" != "$FILE_VERSION" ]; then
                   TARGET_FILE="$MAIN_FOLDER/$VERSION/$FILE_MODULE/$FILE_NAME"
-                  
-                  # If the target file exists in the other version folder, sync the properties
-                  if [ -f "$TARGET_FILE" ]; then
-                    echo "Syncing properties from $FILE to $TARGET_FILE"
-                    
-                    # Run the Python syncing script
-                    python .github/scripts/sync_instances.py "$FILE" "$TARGET_FILE"
+                  if [ -d "$MAIN_FOLDER/$VERSION/$FILE_MODULE/" ]; then
+                    echo "Generating instance from $FILE to $TARGET_FILE"
+                    python .github/scripts/sync_instances.py "$FILE" "$TARGET_FILE" "$VERSION"
                   fi
                 fi
               done
             done
+            
+            # rm .github/templates/types.json
+            # rm .github/templates/properties.json
+            
+            # Commit changes if any instance files were modified
+            # git config --global user.name "openMINDS pipeline"
+            # git config --global user.email "openminds@ebrains.eu"
+            # git add $MAIN_FOLDER/**/*.jsonld
+            # git commit -m "Population of properties from modified instance files"
+            # git push origin HEAD:main
           
-            # Commit changes if any JSON-LD files were modified
-            git config --global user.name "openMINDS pipeline"
-            git config --global user.email "openminds@ebrains.eu"
+            # Commit changes if any instance files were modified
+            git config --global user.name "Raphael-Gazzotti"
+            git config --global user.email "gazzotti.raphael@gmail.com"
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified instance files"
             git push origin HEAD:main
