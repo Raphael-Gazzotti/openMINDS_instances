@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [closed]
     branches:
+      #- main
       - duplicated
   push:
     branches:
@@ -29,13 +30,14 @@ jobs:
       - name: Process and Sync Changes in instance Files
         id: process_sync_instances
         run: |
-          # Fetch the base branch for comparison
           set -x
+          # Fetch the base branch for comparison
           git fetch origin $GITHUB_BASE_REF
           
           # Compare the changes between the PR branch and the base branch
           git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
           
+          cat changed_files.txt
           declare -A seen_files
           declare -A modified_jsons
           
