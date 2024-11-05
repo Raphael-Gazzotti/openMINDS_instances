@@ -4,10 +4,10 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      - duplicate
   push:
     branches:
-      - main
+      - duplicate
 
 jobs:
   sync-instances:
@@ -30,9 +30,8 @@ jobs:
         run: |
           set -x
           # Fetch the base branch for comparison
-          GITHUB_BASE_REF="${GITHUB_BASE_REF:-main}"
           git fetch origin $GITHUB_BASE_REF
-          echo “$GITHUB_BASE_REF”
+          echo "$GITHUB_BASE_REF"
 
           # Compare the changes between the PR branch and the base branch
           git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
@@ -97,7 +96,7 @@ jobs:
             git config --global user.email "gazzotti.raphael@gmail.com"
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified instance files"
-            git push origin HEAD:duplicated
+            git push origin HEAD:duplicate
           else
             echo "No JSON-LD files modified."
           fi
