@@ -4,10 +4,10 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      - duplicate
   push:
     branches:
-      - main
+      - duplicate
 
 jobs:
   sync-instances:
