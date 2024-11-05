@@ -30,12 +30,12 @@ jobs:
         run: |
           set -x
           # Fetch the base branch for comparison
-
-          BASE_REF="${GITHUB_BASE_REF:-duplicate}"
-          git fetch origin $BASE_REF
+          
+          git fetch origin $GITHUB_BASE_REF
+          git checkout HEAD
 
           # Compare the changes between the PR branch and the base branch
-          git diff --name-only --diff-filter=AM origin/$BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
+          git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
           
           cat changed_files.txt
           declare -A seen_files
