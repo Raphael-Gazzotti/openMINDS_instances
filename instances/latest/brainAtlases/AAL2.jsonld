@@ -5,7 +5,7 @@
   "@id": "https://openminds.om-i.org/instances/brainAtlas/AAL2",
   "@type": "https://openminds.om-i.org/types/BrainAtlas",
   "abbreviation": "AAL2",
-  "author": null,
+  "author": "test",
   "custodian": null,
   "description": null,
   "digitalIdentifier": null,
