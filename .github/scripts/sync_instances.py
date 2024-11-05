@@ -5,15 +5,6 @@ import sys
 from utils import properties_file, regex_pattern_type, regex_pattern_instance, types_file, version_file
 
 
-def delete_properties(src_data, tgt_data):
-    """Delete properties from tgt_data not in src_data."""
-    for key in list(tgt_data.keys()):
-        if key not in src_data:
-            del tgt_data[key]
-            print(f"Property removed: '{key}' not found in source data.")
-    return tgt_data
-
-
 def sync_properties(src_data, tgt_data, version):
     """Sync properties from src_data to tgt_data."""
     for key, value in src_data.items():
@@ -62,10 +53,13 @@ def sync_properties(src_data, tgt_data, version):
         # Naive approach, just use src_data to build lists
         elif isinstance(value, list):
             if all(isinstance(item, dict) for item in value):
-                tgt_data[key] = []
-                for idx, item in enumerate(value):
-                    tgt_data[key].append({})
-                    tgt_data[key][idx] = sync_properties(item, tgt_data[key][idx], version)
+                # add the list if it does not exist in tgt_data
+                # modify the list if its original length is equal to the new one
+                if len(tgt_data[key]) == 0 or len(tgt_data[key]) == len(value):
+                    tgt_data[key] = []
+                    for idx, item in enumerate(value):
+                        tgt_data[key].append({})
+                        tgt_data[key][idx] = sync_properties(item, tgt_data[key][idx], version)
             else:
                 # Non-dictionary values
                 tgt_data[key] = value
@@ -88,7 +82,6 @@ def main(src_file, tgt_file, version):
     print(f'Synced properties from {src_file} to {tgt_file}')
 
     # Sync properties
-    tgt_data = delete_properties(src_data, tgt_data)
     target_data = sync_properties(src_data, tgt_data, version)
 
     # Write the updated target data back to the file
