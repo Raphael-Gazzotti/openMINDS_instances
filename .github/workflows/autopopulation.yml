@@ -4,10 +4,10 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      - duplicate
   push:
     branches:
-      - main
+      - duplicate
 
 jobs:
   sync-instances:
@@ -30,7 +30,7 @@ jobs:
         run: |
           set -x
           # Fetch the base branch for comparison
-          GITHUB_BASE_REF="${GITHUB_BASE_REF:-main}"
+          GITHUB_BASE_REF="${GITHUB_BASE_REF:-duplicate}"
           git fetch origin $GITHUB_BASE_REF
           echo “$GITHUB_BASE_REF”
 
