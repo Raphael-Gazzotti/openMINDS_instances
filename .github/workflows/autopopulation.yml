@@ -95,6 +95,7 @@ jobs:
             # git push origin HEAD:main
           
             # Commit changes if any instance files were modified
+            git add -A
             git config --global user.name "Raphael-Gazzotti"
             git config --global user.email "gazzotti.raphael@gmail.com"
             git add $MAIN_FOLDER/**/*.jsonld
