@@ -37,12 +37,7 @@ jobs:
           # Compare the changes between the PR branch and the base branch
           #git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
           
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            # For closed PRs, use GITHUB_EVENT_PATH to get the changed files in the PR
-            jq -r '.pull_request.files[] | select(.filename | endswith(".jsonld")) | .filename' "$GITHUB_EVENT_PATH" > changed_files.txt
-          else
-            git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
-          fi
+          git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt || true
           
           cat changed_files.txt
           declare -A seen_files
