@@ -32,9 +32,6 @@ jobs:
           git checkout HEAD
 
           # Compare the changes between the PR branch and the base branch
-          #git fetch origin $GITHUB_BASE_REF
-          #git diff --name-only --diff-filter=AM origin/$GITHUB_BASE_REF...HEAD | grep '\.jsonld$' > changed_files.txt || true
-          
           git diff --name-only --diff-filter=AM HEAD^ HEAD | grep '\.jsonld$' > changed_files.txt || true
           
           cat changed_files.txt
@@ -97,10 +94,11 @@ jobs:
             git config --global user.email "gazzotti.raphael@gmail.com"
             git add $MAIN_FOLDER/**/*.jsonld
             git commit -m "Population of properties from modified instance files"
-          
-            # Pull with rebase to ensure no conflicts with remote
-            git pull origin duplicate --rebase
-          
+            
+            # Fetch latest changes from remote and rebase before pushing
+            git fetch origin duplicate
+            git rebase origin/duplicate
+            
             git push origin HEAD:duplicate
           else
             echo "No JSON-LD files modified."
