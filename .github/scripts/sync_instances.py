@@ -78,8 +78,11 @@ def main(src_file, tgt_file, version):
         src_data = json.load(f)
 
     # Load target JSON data
-    with open(tgt_file) as f:
-        tgt_data = json.load(f)
+    try:
+        with open(tgt_file) as f:
+            tgt_data = json.load(f)
+    except FileNotFoundError:
+        tgt_data = {}
 
     print(f'Synced properties from {src_file} to {tgt_file}')
 
