@@ -90,9 +90,9 @@ jobs:
               done
             done
             
-            # Cleanup of template files
-            rm .github/templates/types.json
-            rm .github/templates/properties.json
+            # Clean up template files and changed_files.txt
+            rm .github/templates/types.json .github/templates/properties.json
+            rm changed_files.txt
             
             # Commit changes if any instance files were modified
             # git config --global user.name "openMINDS pipeline"
