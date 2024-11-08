@@ -17,12 +17,14 @@
     },
     {
       "@id": "https://openminds.ebrains.eu/instances/brainAtlasVersion/AMBA_CCFv3-2017"
-    }
+    },
+    {},
+    {}
   ],
   "homepage": "https://portal.brain-map.org/",
   "howToCite": null,
   "shortName": "Allen Mouse Brain Atlas",
-	"usedSpecies": {
-		"@id": "https://openminds.ebrains.eu/instances/species/musMusculus"
-	}
+  "usedSpecies": {
+    "@id": "https://openminds.ebrains.eu/instances/species/musMusculus"
+  }
 }
