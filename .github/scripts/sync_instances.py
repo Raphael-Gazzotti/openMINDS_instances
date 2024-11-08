@@ -57,7 +57,9 @@ def sync_properties(src_data, tgt_data, version):
                 if key not in tgt_data:
                     tgt_data[key] = []
 
+
                 if len(tgt_data[key]) == 0 or len(tgt_data[key]) == len(value):
+                    tgt_data[key] = []
                     for idx, item in enumerate(value):
                         tgt_data[key].append({})
                         tgt_data[key][idx] = sync_properties(item, tgt_data[key][idx], version)
