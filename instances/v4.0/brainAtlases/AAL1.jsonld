@@ -2,20 +2,21 @@
   "@context": {
     "@vocab": "https://openminds.om-i.org/props/"
   },
-  "@id": "https://openminds.om-i.org/instances/brainAtlas/AAL1",
+  "@id": "https://openminds.om-i.org/instances/brainAtlas/AAL2",
   "@type": "https://openminds.om-i.org/types/BrainAtlas",
   "abbreviation": "AAL1",
   "author": null,
   "custodian": null,
   "description": null,
-  "digitalIdentifier": null,
-  "fullName": "Automated Anatomical Labeling Atlas 1",
+  "digitalIdentifier": "test",
+  "fullName": "Automated Anatomical Labeling Atlas 2",
   "hasTerminology": {
     "@type": "https://openminds.om-i.org/types/ParcellationTerminology",
     "dataLocation": null,
     "hasEntity": [
       {
-        "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_centralRegion"
+        "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_centralRegion",
+        "value": "xx"
       },
       {
         "@id": "https://openminds.om-i.org/instances/parcellationEntity/AAL1_PRE"
@@ -193,7 +194,7 @@
   "homepage": "https://www.gin.cnrs.fr/en/tools/aal/",
   "howToCite": null,
   "shortName": "AAL Atlas 1",
-	"usedSpecies": {
-		"@id": "https://openminds.om-i.org/instances/species/homoSapiens"
-	}
+  "usedSpecies": {
+    "@id": "https://openminds.om-i.org/instances/species/homoSapiens"
+  }
 }
