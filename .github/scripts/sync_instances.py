@@ -8,11 +8,11 @@ from utils import properties_file, regex_pattern_type, regex_pattern_instance, t
 def sync_properties(src_data, tgt_data, version):
     """Sync properties from src_data to tgt_data."""
     for key, value in src_data.items():
-        # Check if @type exists for a given version and replace by the appropriate namespace
         try:
             if key == "@vocab":
                 tgt_data[key] = version_file[version]["namespaces"]["props"]
                 continue
+            # Check if @type exists for a given version and add the appropriate namespaces
             elif key == "@type":
                 if re.match(regex_pattern_type, src_data[key]):
                     _type = re.sub(regex_pattern_type, "", src_data[key])
@@ -50,11 +50,10 @@ def sync_properties(src_data, tgt_data, version):
         if isinstance(value, dict):
             tgt_data[key] = sync_properties(value, tgt_data.get(key, {}), version)
 
-        # Naive approach, just use src_data to build lists
         elif isinstance(value, list):
             if all(isinstance(item, dict) for item in value):
-                # add the list if it does not exist in tgt_data
-                # modify the list if its original length is equal to the new one
+                # Add the list if it does not exist in tgt_data
+                # Modify the list if its original length is equal to the new one
                 if key not in tgt_data:
                     tgt_data[key] = []
 
@@ -78,8 +77,11 @@ def main(src_file, tgt_file, version):
         src_data = json.load(f)
 
     # Load target JSON data
-    with open(tgt_file) as f:
-        tgt_data = json.load(f)
+    try:
+        with open(tgt_file) as f:
+            tgt_data = json.load(f)
+    except FileNotFoundError:
+        tgt_data = {}
 
     print(f'Synced properties from {src_file} to {tgt_file}')
 
