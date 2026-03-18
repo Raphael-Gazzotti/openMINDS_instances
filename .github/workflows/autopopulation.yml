@@ -86,7 +86,7 @@ jobs:
               for VERSION in $(ls "$MAIN_FOLDER"); do
                 if [ "$VERSION" != "$FILE_VERSION" ]; then
                   TARGET_FILE="$MAIN_FOLDER/$VERSION/$FILE_MODULE/$FILE_NAME"
-                  TOP_LEVEL=$(echo "$FILE_MODULE" | cut -d'/' -f1)
+                  TOP_MODULE=$(echo "$FILE_MODULE" | cut -d'/' -f1)
               
                   if [[ "$FILE_MODULE" == "terminologies/terminology" ]] && [[ ! -e "$TARGET_FILE" ]]; then
                     echo "Skipping $TARGET_FILE: terminology file does not exist in $VERSION."
