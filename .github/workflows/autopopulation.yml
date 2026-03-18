@@ -84,7 +84,6 @@ jobs:
           
               # Iterate over existing versions in the instances directory
               for VERSION in $(ls "$MAIN_FOLDER"); do
-              for VERSION in $(ls "$MAIN_FOLDER"); do
                 if [ "$VERSION" != "$FILE_VERSION" ]; then
                   TARGET_FILE="$MAIN_FOLDER/$VERSION/$FILE_MODULE/$FILE_NAME"
                   TOP_LEVEL=$(echo "$FILE_MODULE" | cut -d'/' -f1)
